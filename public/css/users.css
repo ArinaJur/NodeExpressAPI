@@ -1,0 +1,17 @@
+h1 {
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-top: 50px;
+}
+
+.container {
+    margin-top: 20px;
+    width: 50% !important;
+}
+
+.form-group {
+    margin: 20px;
+}
+
