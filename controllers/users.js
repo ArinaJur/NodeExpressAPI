@@ -4,19 +4,28 @@ import log from '../logger/logger.js';
 let users = [];
 
 export const getUsers = (req, res) => {
-    log.info("GET request to endpoint '/users' received.");
+    log.info("GET request to endpoint '/api/users' received.");
 
     res.send(users.length ? users : "There are no users.");
 };
+
 export const postUsers = (req, res) => {
-    log.info("POST request to endpoint '/users' received.");
+    log.info("POST request to endpoint '/api/users' received.");
 
     //create user
     const user = req.body;
     users.push({...user, id: uuid()});
 
     res.send("User created successfully.");
-} ;
+};
+
+export const deleteUsers = (req, res) => {
+    log.info("DELETE request to endpoint '/api/users' received.");
+
+    users = [];
+
+    res.send("DB cleaned successfully.");
+}
 
 export const getUserById = (req, res) => {
     log.info("GET request to endpoint '/users/id' received.");

@@ -1,21 +1,16 @@
 class Log {
-
-
-
-
-
     info = text => {
-        console.info(`[${getData()}]`, "[INFO]", text);
+        console.info(`[${getDate()}]`, "[INFO]", text);
     }
     warning = text => {
-        console.info(`[${getData()}]`, "[WARN]", text);
+        console.info(`[${getDate()}]`, "[WARN]", text);
     }
     error = text => {
-        console.info(`[${getData()}]`, "[ERROR]", text);
+        console.info(`[${getDate()}]`, "[ERROR]", text);
     }
     // fatal
     server = text => {
-        console.info(`[${getData()}]`, "[SERV]", text);
+        console.info(`[${getDate()}]`, "[SERV]", text);
     }
 
     //api
@@ -23,7 +18,7 @@ class Log {
     //test
 }
 
-function getData() {
+function getDate() {
     const date = new Date();
     return date.toLocaleString('en-US', { timeZoneName: 'short' });
 }
