@@ -8,10 +8,10 @@
             rel="stylesheet"
             integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
             crossorigin="anonymous">
-    <link rel="stylesheet" href="css/users.css">
+    <link rel="stylesheet" href="users.css">
 </head>
 <body>
-    <h1 class="text-center">Node Express API Server App</h1>
+    <h1 class="text-center" id="appName"></h1>
 
     <div class="container">
         <ul class="nav nav-tabs d-flex justify-content-center">
@@ -52,7 +52,7 @@
                        placeholder="Enter age...">
             </div>
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary mb-4 p-2 fs-5" disabled>Add</button>
+                <button type="submit" class="btn btn-primary mb-4 p-2 fs-5" id="addButton" disabled>Add</button>
             </div>
         </form>
     </div>
@@ -69,30 +69,9 @@
                 <th scope="col">ID</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>30</td>
-                <td>ljhfdcvljhvsjldv-hgc7964-79654</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>40</td>
-                <td>ljhfdcvljhvsjldv-hgc7964-79654</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>50</td>
-                <td>ljhfdcvljhvsjldv-hgc7964-79654</td>
-            </tr>
-            </tbody>
+            <tbody id="usersList"></tbody>
         </table>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
