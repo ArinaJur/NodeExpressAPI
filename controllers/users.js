@@ -1,16 +1,16 @@
 import { v4 as uuid } from "uuid";
 import log from '../logger/logger.js';
 
-let users = [];
+let users = []; //our real DB
 
 export const getUsers = (req, res) => {
-    log.info("GET request to endpoint '/api/users' received.");
+    log.info("GET request to endpoint '/api/users/' received.");
 
     res.send(users.length ? users : "There are no users.");
 };
 
 export const postUsers = (req, res) => {
-    log.info("POST request to endpoint '/api/users' received.");
+    log.info("POST request to endpoint '/api/users/' received.");
 
     //create user
     const user = req.body;
