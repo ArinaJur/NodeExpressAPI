@@ -4,6 +4,7 @@ const lastNameInput = document.getElementById('lastName');
 const ageInput = document.getElementById('age');
 const addButton = document.getElementById('addButton');
 const usersList = document.getElementById('usersList');
+const form = document.getElementById('form-user');
 
 let rowNumber = 1;
 
@@ -30,7 +31,6 @@ const usersFromData = [
 ]
 
 const storedUsers = JSON.parse(JSON.stringify(usersFromData));
-
 
 class User {
     constructor(firstName, lastName, age, id) {
@@ -87,12 +87,31 @@ class UI {
             const lastName = lastNameInput.value.trim();
             const age = ageInput.value;
 
+            //API call POST to endpoint '/users'
             await UserService.postUsers(firstName, lastName, age);
 
+            //API call GET to endpoint '/users'
             const users = await UserService.getUsers();
 
             console.log("users from GET call", users);
 
+            let userID = 0;
+            let newUser = {};
+
+            users.forEach((user) => {
+                if(user.firstName === firstName
+                    && user.lastName === lastName
+                    && user.age === age
+                ) {
+                    userID = user.id;
+                    console.log("userID from server = ", userID);
+
+                    newUser = new User(user.firstName, user.lastName, user.age, userID);
+                    console.log("Object of class User (OOP): ", newUser);
+                }
+            })
+
+            return newUser;
         }
     }
 
@@ -118,7 +137,7 @@ class AppService {
             .then(response => {
                 if (response.status !== 200) {
                     console.error("[ERROR] Response status: ", response.status);
-                    throw new Error('Failed to fetch app name. Unexpected response status.')
+                    throw new Error('[ERROR] Failed to fetch app name. Unexpected response status.')
                 }
 
                 return response.text();
@@ -136,7 +155,7 @@ class UserService {
             .then(response => {
                 if (response.status !== 200) {
                     console.error("[ERROR] Response status:", response.status);
-                    throw new Error("Failed to fetch users.");
+                    throw new Error("[ERROR] Failed to fetch users.");
                 }
                 //if response.code === 200,  we have 2 ways
                 const contentType = response.headers.get('Content-Type');
@@ -149,14 +168,14 @@ class UserService {
                     //2. list of users in json format
                     //      if Content-Type = 'application/json'
                     return response.json();
-                    //catchError
+                //catchError
                 } else {
                     console.error("[ERROR] Unexpected Content-Type: ", contentType);
-                    throw new Error("Unexpected Content-Type.");
+                    throw new Error("[ERROR] Unexpected Content-Type.");
                 }
             })
             .catch(error => {
-                console.error("Fetch error: ", error);
+                console.error("[ERROR] Fetch error: ", error);
                 throw error;
              })
     }
@@ -218,10 +237,14 @@ document.addEventListener('DOMContentLoaded', UI.displayUsers);
 // find specific user, create user as an object,
 // and display specific user in a table
 
-document.getElementById("form-user").addEventListener('submit', async (event) => {
+form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    await UI.createUser();
+    const user = await UI.createUser();
+    UI.addUserToList(user);
+
+    form.reset();
+    addButton.disabled = true;
 
 
 })
