@@ -1,10 +1,13 @@
 const appName = document.getElementById('appName');
+const userIdInput = document.getElementById('userId');
 const firstNameInput = document.getElementById('firstName');
 const lastNameInput = document.getElementById('lastName');
 const ageInput = document.getElementById('age');
 const addButton = document.getElementById('addButton');
+const searchButton = document.getElementById('searchButton');
 const usersList = document.getElementById('usersList');
-const form = document.getElementById('form-user');
+const formAdd = document.getElementById('form-user');
+const formSearch = document.getElementById('form-search');
 
 let rowNumber = 1;
 
@@ -70,10 +73,8 @@ class UI {
     static async  displayUsers() {
         // const users = storedUsers //Mock data;
         const users = await UserService.getUsers() || []; //API call GET users;
-        console.log(users);
-        console.log(users.size);
 
-        if(users.size) {
+        if(typeof users !== 'string' && users.length) {
             users.forEach((user) => {
                 console.log('user = ', user);
                 UI.addUserToList(user);
@@ -127,6 +128,86 @@ class UI {
 
         usersList.appendChild(row);
         rowNumber ++;
+    }
+
+    static getSearchCriteria() {
+        const userIdValue = userIdInput.value.trim().length > 0 ? userIdInput.value.trim() : '';
+        const firstNameValue = firstNameInput.value.trim().length > 0 ? firstNameInput.value.trim() : '';
+        const lastNameValue = lastNameInput.value.trim().length > 0 ? lastNameInput.value.trim() : '';
+        const ageValue = ageInput.value.trim().length > 0 ? ageInput.value.trim() : -1;
+
+        if(userIdValue.length || firstNameValue.length || lastNameValue.length || ageValue !== -1) {
+            return {
+                'userId': userIdValue,
+                'firstName': firstNameValue,
+                'lastName': lastNameValue,
+                'age': ageValue
+            };
+        }
+
+        return {};
+    }
+
+    static isSearchCriteriaValid(searchCriteria) {
+        return Object.keys(searchCriteria).length > 0;
+    }
+
+    static activateSearchButton() {
+        const searchCriteria = UI.getSearchCriteria();
+        console.log("searchCriteria", searchCriteria);
+
+        if(UI.isSearchCriteriaValid(searchCriteria)) {
+            searchButton.disabled = false;
+        }
+    }
+
+    static preventSearchUrl() {
+        if(window.location.pathname === '/search?') {
+            window.history.pushState({}, '', '/search');
+        }
+    }
+
+    static async searchUsers() {
+        const searchCriteria = UI.getSearchCriteria();
+        if(UI.isSearchCriteriaValid(searchCriteria)) {
+            const users = await UserService.getUsers() || [];
+
+            console.log("Users from DB: ", users);
+
+            if(typeof users !== 'string' && users.length) {
+                usersList.innerHTML = '';
+                let searchResultRowNumber = 1;
+                users.forEach((user) => {
+                    if (
+                        user.id === searchCriteria.userId
+                        || user.firstName === searchCriteria.firstName
+                        || user.lastName === searchCriteria.lastName
+                        || user.age === searchCriteria.age
+                    ) {
+                        const foundUser = new User(user.firstName, user.lastName, user.age, user.id);
+
+                        console.log("Found User: ", foundUser);
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <th scope="row">${searchResultRowNumber}</th>
+                            <td>${user.firstName}</td>
+                            <td>${user.lastName}</td>
+                            <td>${user.age}</td>
+                            <td>${user.id}</td>
+                        `;
+
+                        usersList.appendChild(row);
+                        searchResultRowNumber ++;
+                    }
+                })
+            }
+
+
+
+
+        }
+
     }
 
 }
@@ -227,27 +308,53 @@ class UserService {
 //event to show App Name
 document.addEventListener('DOMContentLoaded', UI.displayAppName);
 
-//event to activate Add button
-document.addEventListener('input', UI.activateAddButton);
-
 //event to display users
 document.addEventListener('DOMContentLoaded', UI.displayUsers);
 
-//event to add user to DB, get list of all users,
+//we are on tab Add
+if(formAdd !== null) {
+    //event to activate Add button
+    formAdd.addEventListener('input', UI.activateAddButton);
+
+    //event to add user to DB, get list of all users,
 // find specific user, create user as an object,
 // and display specific user in a table
 
-form.addEventListener('submit', async (event) => {
-    event.preventDefault();
+    formAdd.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-    const user = await UI.createUser();
-    UI.addUserToList(user);
+        const user = await UI.createUser();
+        UI.addUserToList(user);
 
-    form.reset();
-    addButton.disabled = true;
+        formAdd.reset();
+        addButton.disabled = true;
+    })
+}
 
 
-})
+//we are on tab Search
+if(formSearch !== null) {
+    formSearch.addEventListener('input', UI.activateSearchButton);
+
+    formSearch.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        UI.preventSearchUrl();
+
+        await UI.searchUsers();
+
+        formSearch.reset();
+        searchButton.disabled = true;
+    })
+
+}
+
+
+
+
+
+
+
+
 
 
 
