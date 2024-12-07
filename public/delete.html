@@ -40,26 +40,58 @@
                 <label for="userId">User ID</label>
                 <input type="text" class="form-control"
                        id="userId"
-                       placeholder="Enter user ID...">
+                       placeholder="">
             </div>
             <div class="form-group">
                 <label for="firstName">First Name</label>
                 <input type="text" class="form-control"
                        id="firstName"
-                       placeholder="Enter first name...">
+                       placeholder="">
             </div>
             <div class="form-group">
                 <label for="lastName">Last Name</label>
                 <input type="text" class="form-control"
                        id="lastName"
-                       placeholder="Enter last name...">
+                       placeholder="">
             </div>
             <div class="form-group">
                 <label for="age">Age</label>
                 <input type="number" class="form-control"
                        id="age"
-                       placeholder="Enter age...">
+                       placeholder="">
             </div>
+
+            <script>
+                const defaultValueId = "Enter user ID...";
+                const defaultValueFirstName = "Enter first name...";
+                const defaultValueLastName = "Enter last name...";
+                const defaultValueAge = "Enter age...";
+
+                // Retrieve the input element
+                let inputId = document.getElementById('userId');
+                let inputFirstName = document.getElementById('firstName');
+                let inputLastName = document.getElementById('lastName');
+                let inputAge = document.getElementById('age');
+
+                // Check if a custom value exists
+                const id = localStorage.getItem('idValue');
+                const firstName = localStorage.getItem('firstNameValue');
+                const lastName = localStorage.getItem('lastNameValue');
+                const age = localStorage.getItem('ageValue');
+
+                // Update placeholder
+                inputId.placeholder = id ? id : defaultValueId;
+                inputFirstName.placeholder = firstName ? firstName : defaultValueFirstName;
+                inputLastName.placeholder = lastName ? lastName : defaultValueLastName;
+                inputAge.placeholder = age ? age : defaultValueAge;
+
+                // Optional: Clear the stored value after usage
+                localStorage.removeItem('idValue');
+                localStorage.removeItem('firstNameValue');
+                localStorage.removeItem('lastNameValue');
+                localStorage.removeItem('ageValue');
+            </script>
+
             <div class="d-flex justify-content-center">
                 <button type="submit" class="btn btn-primary mb-4 p-2 fs-5" id="deleteButton" disabled>Delete</button>
             </div>
