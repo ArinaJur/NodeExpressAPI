@@ -391,17 +391,3 @@ usersList.addEventListener('click', (event) => {
         console.log("copiedUser = ", copiedUser);
     }
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
