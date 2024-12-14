@@ -5,11 +5,20 @@ const lastNameInput = document.getElementById('lastName');
 const ageInput = document.getElementById('age');
 const addButton = document.getElementById('addButton');
 const searchButton = document.getElementById('searchButton');
+const editButton = document.getElementById('editButton');
+const deleteButton = document.getElementById('deleteButton');
 const usersList = document.getElementById('usersList');
 const formAdd = document.getElementById('form-user');
 const formSearch = document.getElementById('form-search');
+const formEdit = document.getElementById('form-edit');
+const formDelete = document.getElementById('form-delete');
 
 let rowNumber = 1;
+
+const defaultIdPlaceholder = "Enter user ID...";
+const defaultFirstNamePlaceholder = "Enter first name...";
+const defaultLastNamePlaceholder = "Enter last name...";
+const defaultAgePlaceholder = "Enter age...";
 
 //mock data
 const usersFromData = [
@@ -244,6 +253,63 @@ class UI {
         return userInfo;
     }
 
+    static clearLocalStorage() {
+        if(localStorage.getItem('idValue') !== null) {
+            localStorage.removeItem('idValue');
+        }
+        if(localStorage.getItem('firstNameValue') !== null) {
+            localStorage.removeItem('firstNameValue');
+        }
+        if(localStorage.getItem('lastNameValue') !== null) {
+            localStorage.removeItem('lastNameValue');
+        }
+        if(localStorage.getItem('ageValue') !== null) {
+            localStorage.removeItem('ageValue');
+        }
+    }
+
+    static setValuesToLocalStorage(user) {
+        if(user !== null) {
+            localStorage.setItem('idValue', user.id);
+            localStorage.setItem('firstNameValue', user.firstName);
+            localStorage.setItem('lastNameValue', user.lastName);
+            localStorage.setItem('ageValue', user.age);
+        }
+    }
+
+    static fillPlaceholders() {
+        //Check if local storage data exists
+        const id = localStorage.getItem('idValue');
+        const firstName = localStorage.getItem('firstNameValue');
+        const lastName = localStorage.getItem('lastNameValue');
+        const age = localStorage.getItem('ageValue');
+
+        //Update placeholders
+        userIdInput.placeholder = id ? id : defaultIdPlaceholder;
+        firstNameInput.placeholder = firstName ? firstName : defaultFirstNamePlaceholder;
+        lastNameInput.placeholder = lastName ? lastName : defaultLastNamePlaceholder;
+        ageInput.placeholder = age ? age : defaultAgePlaceholder;
+    }
+
+    static activateEditButton() {
+        editButton.disabled = false;
+    }
+
+    static activateDeleteButton() {
+        if(userIdInput.placeholder !== defaultIdPlaceholder
+            && firstNameInput.placeholder !== defaultFirstNamePlaceholder
+            && lastNameInput.placeholder !== defaultLastNamePlaceholder
+            && ageInput.placeholder !== defaultAgePlaceholder
+        ) {
+            userIdInput.readOnly = true;
+            firstNameInput.readOnly = true;
+            lastNameInput.readOnly = true;
+            ageInput.readOnly = true;
+
+            deleteButton.disabled = false;
+        }
+    }
+
 }
 
 class AppService {
@@ -381,6 +447,7 @@ if(formSearch !== null) {
     })
 }
 
+
 //we are on any tab
 usersList.addEventListener('click', (event) => {
     console.log(event.target);
@@ -389,5 +456,41 @@ usersList.addEventListener('click', (event) => {
         const copiedUser = new User(userInfo[0], userInfo[1], userInfo[2], userInfo[3]);
 
         console.log("copiedUser = ", copiedUser);
+
+        UI.clearLocalStorage();
+        UI.setValuesToLocalStorage(copiedUser);
     }
 })
+
+//we are on tab Edit
+if(formEdit !== null) {
+    document.addEventListener('DOMContentLoaded', () => {
+        UI.fillPlaceholders();
+        if(userIdInput.placeholder !== defaultIdPlaceholder) {
+            userIdInput.readOnly = true;
+        }
+    })
+
+    firstNameInput.addEventListener('input', () => {
+        firstNameInput.style.background = "#E8F0FE";
+        UI.activateEditButton();
+    })
+
+    lastNameInput.addEventListener('input', () => {
+        lastNameInput.style.background = "#E8F0FE";
+        UI.activateEditButton();
+    })
+
+    ageInput.addEventListener('input', () => {
+        ageInput.style.background = "#E8F0FE";
+        UI.activateEditButton();
+    })
+}
+
+//we are on tab Delete
+if(formDelete !== null) {
+    document.addEventListener('DOMContentLoaded', () => {
+        UI.fillPlaceholders();
+        UI.activateDeleteButton();
+    })
+}

@@ -31,3 +31,11 @@ h2 {
 #deleteIcon a:hover {
     color: red;
 }
+
+input[readonly]::placeholder {
+    color: darkgrey;
+}
+
+/*input[readonly] {*/
+/*    background: gainsboro;*/
+/*}*/
