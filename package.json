@@ -5,7 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "build": "npm run build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +20,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
+    "gh-pages": "^6.3.0",
     "nodemon": "^3.1.7"
-  }
+  },
+  "homepage": "https://ArinaJur.github.io/NodeExpressAPI"
 }
