@@ -329,7 +329,7 @@ class UI {
 
 class AppService {
     static getAppName() {
-        return fetch("http://localhost:5000/api/")
+        return fetch("https://nodeexpressapi-hk61.onrender.com/api/")
             .then(response => {
                 if (response.status !== 200) {
                     console.error("[ERROR] Response status: ", response.status);
@@ -347,7 +347,7 @@ class AppService {
 
 class UserService {
     static getUsers() {
-        return fetch("http://localhost:5000/api/users/")
+        return fetch("https://nodeexpressapi-hk61.onrender.com/api/users/")
             .then(response => {
                 if (response.status !== 200) {
                     console.error("[ERROR] Response status:", response.status);
