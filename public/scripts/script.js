@@ -384,7 +384,7 @@ class UserService {
 
         try {
             const response = await fetch(
-                "http://localhost:5000/api/users/",
+                "https://nodeexpressapi-hk61.onrender.com/api/users/",
                 {
                     method: 'POST',
                     headers: {
@@ -440,7 +440,7 @@ class UserService {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/users/${user.id}`,
+                `https://nodeexpressapi-hk61.onrender.com/api/users/${user.id}`,
                 {
                     method: 'PATCH',
                     headers: {
@@ -479,7 +479,7 @@ class UserService {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/users/${id}`,
+                `https://nodeexpressapi-hk61.onrender.com/api/users/${id}`,
                 {
                     method: 'DELETE'
                 })
